@@ -1,0 +1,90 @@
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ETAApplication {
+  id                 String   @id @default(uuid())
+  
+  // Personal Information
+  firstName          String
+  lastName           String
+  dateOfBirth        DateTime
+  gender             Gender
+  nationality        String
+  maritalStatus      MaritalStatus?
+  
+  // Contact Information
+  email              String
+  phone              String?
+  addressLine1       String?
+  addressLine2       String?
+  city               String?
+  stateProvince      String?
+  postalCode         String?
+  country            String?
+  
+  // Passport / Travel Information
+  passportNumber     String
+  passportIssueDate  DateTime
+  passportExpiryDate DateTime
+  issuingCountry     String
+  
+  // Travel / Background Questions
+  hasPreviousETA     Boolean      @default(false)
+  employmentStatus   Employment?
+  purposeOfTravel    PurposeOfTravel?
+  intendedArrival    DateTime?
+  intendedDeparture  DateTime?
+  additionalInfo     String?      // free text if needed
+
+  // Application Details
+  feePaid            Boolean      @default(false)
+  feeAmount          Float        @default(7.0)  // eTA fee in CAD
+  applicationDate    DateTime     @default(now())
+  status             ApplicationStatus @default(PENDING)
+
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum MaritalStatus {
+  SINGLE
+  MARRIED
+  DIVORCED
+  WIDOWED
+  SEPARATED
+}
+
+enum Employment {
+  EMPLOYED
+  UNEMPLOYED
+  STUDENT
+  RETIRED
+}
+
+enum PurposeOfTravel {
+  TOURISM
+  BUSINESS
+  VISITING_FAMILY
+  TRANSIT
+  OTHER
+}
+
+enum ApplicationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
