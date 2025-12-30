@@ -22,8 +22,12 @@ interface Props {
 
 export default function ApplicationForm({ mode, applicationId }: Props) {
   const methods = useForm<UpdateETAApplicationInput>({
-    resolver: zodResolver(updateETAApplicationSchema),
-    shouldUnregister: false, // 🔑 keeps data between steps
+    resolver: zodResolver(updateETAApplicationSchema.partial()),
+    shouldUnregister: false,
+
+    // 🔴 REAL-TIME VALIDATION
+    mode: "onTouched",
+    reValidateMode: "onChange",
   });
 
   const { handleSubmit, reset, getValues } = methods;
@@ -47,19 +51,25 @@ export default function ApplicationForm({ mode, applicationId }: Props) {
   const onSubmit = async (data: UpdateETAApplicationInput) => {
     setLoading(true);
 
-    // 🔒 Extra safety before final submit
-    createETAApplicationSchema.parse({
-      firstName: data.firstName,
-      lastName: data.lastName,
-      dateOfBirth: data.dateOfBirth,
-      gender: data.gender,
-      nationality: data.nationality,
-      email: data.email,
-      passportNumber: data.passportNumber,
-      passportIssueDate: data.passportIssueDate,
-      passportExpiryDate: data.passportExpiryDate,
-      issuingCountry: data.issuingCountry,
-    });
+    // 🔒 STRICT VALIDATION (FINAL)
+    try {
+      createETAApplicationSchema.parse({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        dateOfBirth: data.dateOfBirth,
+        gender: data.gender,
+        nationality: data.nationality,
+        email: data.email,
+        passportNumber: data.passportNumber,
+        passportIssueDate: data.passportIssueDate,
+        passportExpiryDate: data.passportExpiryDate,
+        issuingCountry: data.issuingCountry,
+      });
+    } catch (err) {
+      alert("Please fix the highlighted errors before submitting.");
+      setLoading(false);
+      return;
+    }
 
     const url =
       mode === "create"

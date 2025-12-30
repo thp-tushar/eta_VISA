@@ -7,34 +7,80 @@ import {
 } from "@/lib/validators/application";
 
 export default function PersonalInfo() {
-  const { register } = useFormContext();
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
 
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-semibold">Personal Information</h2>
 
-      <input {...register("firstName")} placeholder="First Name" />
-      <input {...register("lastName")} placeholder="Last Name" />
+      <div>
+        <input {...register("firstName")} placeholder="First Name" />
+        {errors.firstName && (
+          <p className="text-red-500 text-sm">{errors.firstName.message}</p>
+        )}
+      </div>
 
-      <input type="date" {...register("dateOfBirth")} />
+      <div>
+        <input {...register("lastName")} placeholder="Last Name" />
+        {errors.lastName && (
+          <p className="text-red-500 text-sm">{errors.lastName.message}</p>
+        )}
+      </div>
 
-      <select {...register("gender")}>
-        <option value="">Select Gender</option>
-        {GenderEnum.options.map((g) => (
-          <option key={g} value={g}>{g}</option>
-        ))}
-      </select>
+      <div>
+        <input type="date" {...register("dateOfBirth")} />
+        {errors.dateOfBirth && (
+          <p className="text-red-500 text-sm">{errors.dateOfBirth.message}</p>
+        )}
+      </div>
 
-      <select {...register("maritalStatus")}>
-        <option value="">Marital Status</option>
-        {MaritalStatusEnum.options.map((m) => (
-          <option key={m} value={m}>{m}</option>
-        ))}
-      </select>
+      <div>
+        <select {...register("gender")}>
+          <option value="">Select Gender</option>
+          {GenderEnum.options.map((g) => (
+            <option key={g} value={g}>{g}</option>
+          ))}
+        </select>
+        {errors.gender && (
+          <p className="text-red-500 text-sm">{errors.gender.message}</p>
+        )}
+      </div>
 
-      <input {...register("nationality")} placeholder="Nationality" />
-      <input {...register("email")} placeholder="Email" />
-      <input {...register("phone")} placeholder="Phone (optional)" />
+      <div>
+        <select {...register("maritalStatus")}>
+          <option value="">Marital Status</option>
+          {MaritalStatusEnum.options.map((m) => (
+            <option key={m} value={m}>{m}</option>
+          ))}
+        </select>
+        {errors.maritalStatus && (
+          <p className="text-red-500 text-sm">{errors.maritalStatus.message}</p>
+        )}
+      </div>
+
+      <div>
+        <input {...register("nationality")} placeholder="Nationality" />
+        {errors.nationality && (
+          <p className="text-red-500 text-sm">{errors.nationality.message}</p>
+        )}
+      </div>
+
+      <div>
+        <input {...register("email")} placeholder="Email" />
+        {errors.email && (
+          <p className="text-red-500 text-sm">{errors.email.message}</p>
+        )}
+      </div>
+
+      <div>
+        <input {...register("phone")} placeholder="Phone (optional)" />
+        {errors.phone && (
+          <p className="text-red-500 text-sm">{errors.phone.message}</p>
+        )}
+      </div>
     </div>
   );
 }

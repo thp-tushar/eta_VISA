@@ -7,7 +7,10 @@ import {
 } from "@/lib/validators/application";
 
 export default function TravelInfo() {
-  const { register } = useFormContext();
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
 
   return (
     <div className="space-y-4">
@@ -18,27 +21,63 @@ export default function TravelInfo() {
         Have you had a previous ETA?
       </label>
 
-      <select {...register("employmentStatus")}>
-        <option value="">Employment Status</option>
-        {EmploymentEnum.options.map((e) => (
-          <option key={e} value={e}>{e}</option>
-        ))}
-      </select>
+      <div>
+        <select {...register("employmentStatus")}>
+          <option value="">Employment Status</option>
+          {EmploymentEnum.options.map((e) => (
+            <option key={e} value={e}>{e}</option>
+          ))}
+        </select>
+        {errors.employmentStatus && (
+          <p className="text-red-500 text-sm">
+            {errors.employmentStatus.message}
+          </p>
+        )}
+      </div>
 
-      <select {...register("purposeOfTravel")}>
-        <option value="">Purpose of Travel</option>
-        {PurposeOfTravelEnum.options.map((p) => (
-          <option key={p} value={p}>{p}</option>
-        ))}
-      </select>
+      <div>
+        <select {...register("purposeOfTravel")}>
+          <option value="">Purpose of Travel</option>
+          {PurposeOfTravelEnum.options.map((p) => (
+            <option key={p} value={p}>{p}</option>
+          ))}
+        </select>
+        {errors.purposeOfTravel && (
+          <p className="text-red-500 text-sm">
+            {errors.purposeOfTravel.message}
+          </p>
+        )}
+      </div>
 
-      <input type="date" {...register("intendedArrival")} />
-      <input type="date" {...register("intendedDeparture")} />
+      <div>
+        <input type="date" {...register("intendedArrival")} />
+        {errors.intendedArrival && (
+          <p className="text-red-500 text-sm">
+            {errors.intendedArrival.message}
+          </p>
+        )}
+      </div>
 
-      <textarea
-        {...register("additionalInfo")}
-        placeholder="Additional Information (optional)"
-      />
+      <div>
+        <input type="date" {...register("intendedDeparture")} />
+        {errors.intendedDeparture && (
+          <p className="text-red-500 text-sm">
+            {errors.intendedDeparture.message}
+          </p>
+        )}
+      </div>
+
+      <div>
+        <textarea
+          {...register("additionalInfo")}
+          placeholder="Additional Information (optional)"
+        />
+        {errors.additionalInfo && (
+          <p className="text-red-500 text-sm">
+            {errors.additionalInfo.message}
+          </p>
+        )}
+      </div>
     </div>
   );
 }
